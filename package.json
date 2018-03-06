@@ -1,0 +1,17 @@
+{
+  "name": "tinterjs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "ava"
+  },
+  "author": "Andy Payne",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.16.2"
+  },
+  "devDependencies": {
+    "ava": "^1.0.0-beta.3"
+  }
+}
