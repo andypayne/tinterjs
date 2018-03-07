@@ -101,8 +101,9 @@ class Tinter {
   }
 
   octetToStr(n) {
+    // TODO: This produces RGB Hex inaccuracies because it's ignoring decimals
     let ns = n.toString(16)
-    return (n < 0xA ? '0' + ns : ns)
+    return (n <= 0xA ? '0' + ns : ns)
   }
 
   rgbArrayToStr(rgb) {
@@ -142,6 +143,23 @@ class Tinter {
       hsl[2] = 1.0
     } else if (hsl[2] < 0.0) {
       hsl[2] = 0.0
+    }
+    return this.rgbArrayToStr(this.hslToRGB(hsl))
+  }
+
+  // Modify saturation by amt
+  // Amt should be from [-1 to +1]
+  // 1 = 100%, -1 = -100%
+  // The amount is added to or subtracted from the saturation
+  // The RGB hex string is returned
+  modSaturation(rgb, amt) {
+    let hsl = this.rgbToHSL(rgb)
+    hsl[1] += amt
+    // clamp
+    if (hsl[1] > 1.0) {
+      hsl[1] = 1.0
+    } else if (hsl[1] < 0.0) {
+      hsl[1] = 0.0
     }
     return this.rgbArrayToStr(this.hslToRGB(hsl))
   }
