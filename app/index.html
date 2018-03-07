@@ -36,6 +36,10 @@
         color: #fff;
         text-shadow: 0px 1px 8px #000;
       }
+
+      label-shadow {
+        text-shadow: 0px 1px 8px #000;
+      }
     </style>
     <script src="d3.v4.min.js"></script>
   </head>
@@ -48,6 +52,8 @@
     <script>
       let tinter = new Tinter()
       let colorInput = document.querySelector('input[name=base-color]')
+      let w = 800
+      let h = 400
 
       colorInput.addEventListener('keyup', (event) => {
         let baseColor = colorInput.value
@@ -57,12 +63,101 @@
           }
         }, 1)
 
-        let triad = tinter.triadColors(baseColor)
-        let splc = tinter.splitComplementaries(baseColor)
-
         if (event.key === 'Enter') {
+          let triad = tinter.triadColors(baseColor)
+          let splc = tinter.splitComplementaries(baseColor)
           console.log('baseColor: ', baseColor)
           d3.selectAll('div.color-block').remove()
+
+          d3.select('svg').remove()
+          d3.select('svg').remove()
+
+          // Triad
+          let svg = d3.select('body')
+                      .append('svg')
+                      .attr('width', w)
+                      .attr('height', h)
+          svg.selectAll('circle')
+             .data(triad.concat(baseColor))
+             .enter()
+             .append('circle')
+             .attr('cx', (d, i) => {
+               return 180 + 80 * Math.cos(i * Math.PI/1.5 + Math.PI/6)
+             })
+             .attr('cy', (d, i) => {
+               return 180 + 80 * Math.sin(i * Math.PI/1.5 + Math.PI/6)
+             })
+             .attr('r', 60)
+             .style('fill', (d) => {
+               return d
+             })
+          svg.selectAll('text')
+             .data(triad.concat(baseColor))
+             .enter()
+             .append('text')
+             .attr('x', (d, i) => {
+               return 180 + 80 * Math.cos(i * Math.PI/1.5 + Math.PI/6)
+             })
+             .attr('y', (d, i) => {
+               return 180 + 80 * Math.sin(i * Math.PI/1.5 + Math.PI/6)
+             })
+             .attr('fill', 'white')
+             .attr('text-anchor', 'middle')
+             .attr('class', 'label-shadow')
+             .text((d) => {
+               return d
+             })
+          svg.append('text')
+             .attr('x', (w / 2))             
+             .attr('y', 20)
+             .attr('text-anchor', 'middle')  
+             .style('font-size', '16px') 
+             .text('Complementary Triad')
+
+          // Split complementary
+          let svg2 = d3.select('body')
+                       .append('svg')
+                       .attr('width', w)
+                       .attr('height', h)
+          svg2.selectAll('circle')
+             .data(splc.concat(baseColor))
+             .enter()
+             .append('circle')
+             .attr('cx', (d, i) => {
+               return 180 + 80 * Math.cos(i * Math.PI/1.5 + Math.PI/6)
+             })
+             .attr('cy', (d, i) => {
+               return 180 + 80 * Math.sin(i * Math.PI/1.5 + Math.PI/6)
+             })
+             .attr('r', 60)
+             .style('fill', (d) => {
+               return d
+             })
+          svg2.selectAll('text')
+             .data(splc.concat(baseColor))
+             .enter()
+             .append('text')
+             .attr('x', (d, i) => {
+               return 180 + 80 * Math.cos(i * Math.PI/1.5 + Math.PI/6)
+             })
+             .attr('y', (d, i) => {
+               return 180 + 80 * Math.sin(i * Math.PI/1.5 + Math.PI/6)
+             })
+             .attr('fill', 'white')
+             .attr('text-anchor', 'middle')
+             .attr('class', 'label-shadow')
+             .text((d) => {
+               return d
+             })
+          svg2.append('text')
+              .attr('x', (w / 2))             
+              .attr('y', 20)
+              .attr('text-anchor', 'middle')  
+              .style('font-size', '16px') 
+              .text('Split Complementary Triad')
+
+
+
           d3.select('div#tints-shades')
             .append('div')
             .attr('class', 'color-block')
@@ -88,11 +183,14 @@
             .attr('class', 'color-block')
             .text(tinter.tintShade(baseColor, 0.4))
             .style('background-color', tinter.tintShade(baseColor, 0.4))
+
           d3.select('body')
             .append('div')
             .attr('class', 'color-block')
             .text(tinter.complementary(baseColor))
             .style('background-color', tinter.complementary(baseColor))
+
+          /*
           d3.select('body')
             .append('div')
             .attr('class', 'color-block')
@@ -113,6 +211,7 @@
             .attr('class', 'color-block')
             .text(splc[1])
             .style('background-color', splc[1])
+          */
           d3.select('body')
             .append('div')
             .attr('class', 'color-block')
