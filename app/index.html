@@ -52,11 +52,16 @@
       <input type="text" name="base-color" value="#">
       <div id="tints-shades"><h3>Tints and Shades</h3></div>
       <div id="sats"><h3>Saturation Spectrum</h3></div>
+      <div id="neutrals">
+        <h3>Neutrals</h3>
+        <input type="text" name="neutral-amt" size="5" value="0.2" placeholder="0.0-1.0">
+      </div>
     </div>
     <script src="tinter.js"></script>
     <script>
       let tinter = new Tinter()
       let colorInput = document.querySelector('input[name=base-color]')
+      let neutralAmtInput = document.querySelector('input[name=neutral-amt]')
       let w = 400
       let h = 400
 
@@ -268,34 +273,54 @@
           .text(tinter.modSaturation(baseColor, 0.6))
           .style('background-color', tinter.modSaturation(baseColor, 0.6))
 
-        /*
-        d3.select('body')
-          .append('div')
-          .attr('class', 'color-block')
-          .text(tinter.complementary(baseColor))
-          .style('background-color', tinter.complementary(baseColor))
+        let neutralAmt = neutralAmtInput.value
+        let greys = [
+          tinter.addColorsRGB('#000000', baseColor, neutralAmt),
+          tinter.addColorsRGB('#333333', baseColor, neutralAmt),
+          tinter.addColorsRGB('#666666', baseColor, neutralAmt),
+          tinter.addColorsRGB('#999999', baseColor, neutralAmt),
+          tinter.addColorsRGB('#cccccc', baseColor, neutralAmt),
+          tinter.addColorsRGB('#ffffff', baseColor, neutralAmt)
+        ]
 
-        d3.select('body')
+        d3.select('div#neutrals')
+          .selectAll('div')
+          .data(greys)
+          .enter()
           .append('div')
           .attr('class', 'color-block')
-          .text(triad[0])
-          .style('background-color', triad[0])
-        d3.select('body')
-          .append('div')
-          .attr('class', 'color-block')
-          .text(triad[1])
-          .style('background-color', triad[1])
-        d3.select('body')
-          .append('div')
-          .attr('class', 'color-block')
-          .text(splc[0])
-          .style('background-color', splc[0])
-        d3.select('body')
-          .append('div')
-          .attr('class', 'color-block')
-          .text(splc[1])
-          .style('background-color', splc[1])
-        */
+          .style('background-color', (d) => {
+            return d
+          })
+          .text((d) => {
+            return d
+          })
+
+          neutralAmtInput.addEventListener('keyup', (event) => {
+            if (event.key === 'Enter') {
+              neutralAmt = neutralAmtInput.value
+              console.log('neutral amt: ', neutralAmt)
+              greys = [
+                tinter.addColorsRGB('#000000', baseColor, neutralAmt),
+                tinter.addColorsRGB('#333333', baseColor, neutralAmt),
+                tinter.addColorsRGB('#666666', baseColor, neutralAmt),
+                tinter.addColorsRGB('#999999', baseColor, neutralAmt),
+                tinter.addColorsRGB('#cccccc', baseColor, neutralAmt),
+                tinter.addColorsRGB('#ffffff', baseColor, neutralAmt)
+              ]
+
+              d3.select('div#neutrals')
+                .selectAll('div')
+                .data(greys)
+                .style('background-color', (d) => {
+                  return d
+                })
+                .text((d) => {
+                  return d
+                })
+            }
+          })
+
         d3.select('body')
           .append('div')
           .attr('class', 'color-block')

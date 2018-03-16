@@ -28,6 +28,16 @@ let min3 = (x, y, z) => {
   }
 }
 
+let clamp = (x, min, max) => {
+  if (x < min) {
+    return min
+  } else if (x > max) {
+    return max
+  } else {
+    return x
+  }
+}
+
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -39,6 +49,7 @@ class Tinter {
     let rs = rgb.substr(0, 2)
     let gs = rgb.substr(2, 2)
     let bs = rgb.substr(4, 2)
+    // TODO: Replace after tests
     let r01 = parseInt(rs, 16) / 255.0
     let g01 = parseInt(gs, 16) / 255.0
     let b01 = parseInt(bs, 16) / 255.0
@@ -100,10 +111,14 @@ class Tinter {
     return [60.0 * hue, this.rgbHSLSaturation(rgb), this.rgbLightness(rgb)]
   }
 
+  octetStrToInt1(os) {
+    return parseInt(os, 16) / 255.0
+  }
+
   octetToStr(n) {
     // TODO: This produces RGB Hex inaccuracies because it's ignoring decimals
     let ns = n.toString(16)
-    return (n <= 0xA ? '0' + ns : ns)
+    return (n < 0x10 ? '0' + ns : ns)
   }
 
   rgbArrayToStr(rgb) {
@@ -138,6 +153,7 @@ class Tinter {
   tintShade(rgb, amt) {
     let hsl = this.rgbToHSL(rgb)
     hsl[2] += amt
+    // TODO: Change after tests
     // clamp
     if (hsl[2] > 1.0) {
       hsl[2] = 1.0
@@ -191,6 +207,32 @@ class Tinter {
   zeroHue(rgb) {
     let hsl = this.rgbToHSL(rgb)
     let zh = this.rgbArrayToStr(this.hslToRGB([0, hsl[1], hsl[2]]))
+  }
+
+  // Given two RGB colors, add the second one to the first one by amt (0-1)
+  addColorsRGB(rgb1, rgb2, amt) {
+    if (amt < 1.0e-6) {
+      return rgb1
+    }
+    if (rgb1[0] === '#') {
+      rgb1 = rgb1.substr(1)
+    }
+    if (rgb2[0] === '#') {
+      rgb2 = rgb2.substr(1)
+    }
+    let r1 = this.octetStrToInt1(rgb1.substr(0, 2))
+    let g1 = this.octetStrToInt1(rgb1.substr(2, 2))
+    let b1 = this.octetStrToInt1(rgb1.substr(4, 2))
+    let r2 = this.octetStrToInt1(rgb2.substr(0, 2))
+    let g2 = this.octetStrToInt1(rgb2.substr(2, 2))
+    let b2 = this.octetStrToInt1(rgb2.substr(4, 2))
+    let r = r1 * (1 - amt) + r2 * amt
+    let g = g1 * (1 - amt) + g2 * amt
+    let b = b1 * (1 - amt) + b2 * amt
+    r = clamp(r, 0, 1)
+    g = clamp(g, 0, 1)
+    b = clamp(b, 0, 1)
+    return this.rgbArrayToStr([255*r, 255*g, 255*b])
   }
 }
 
