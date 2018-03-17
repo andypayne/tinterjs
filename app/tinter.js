@@ -107,7 +107,6 @@ class Tinter {
     if (hue < 0) {
       hue += 6
     }
-    //return [60.0 * this.rgbHue(rgb), this.rgbHSLSaturation(rgb), this.rgbLightness(rgb)]
     return [60.0 * hue, this.rgbHSLSaturation(rgb), this.rgbLightness(rgb)]
   }
 
@@ -153,13 +152,7 @@ class Tinter {
   tintShade(rgb, amt) {
     let hsl = this.rgbToHSL(rgb)
     hsl[2] += amt
-    // TODO: Change after tests
-    // clamp
-    if (hsl[2] > 1.0) {
-      hsl[2] = 1.0
-    } else if (hsl[2] < 0.0) {
-      hsl[2] = 0.0
-    }
+    hsl[2] = clamp(hsl[2], 0, 1)
     return this.rgbArrayToStr(this.hslToRGB(hsl))
   }
 
@@ -171,12 +164,7 @@ class Tinter {
   modSaturation(rgb, amt) {
     let hsl = this.rgbToHSL(rgb)
     hsl[1] += amt
-    // clamp
-    if (hsl[1] > 1.0) {
-      hsl[1] = 1.0
-    } else if (hsl[1] < 0.0) {
-      hsl[1] = 0.0
-    }
+    hsl[1] = clamp(hsl[1], 0, 1)
     return this.rgbArrayToStr(this.hslToRGB(hsl))
   }
 
