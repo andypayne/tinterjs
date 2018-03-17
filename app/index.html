@@ -274,14 +274,18 @@
           .style('background-color', tinter.modSaturation(baseColor, 0.6))
 
         let neutralAmt = neutralAmtInput.value
-        let greys = [
-          tinter.addColorsRGB('#000000', baseColor, neutralAmt),
-          tinter.addColorsRGB('#333333', baseColor, neutralAmt),
-          tinter.addColorsRGB('#666666', baseColor, neutralAmt),
-          tinter.addColorsRGB('#999999', baseColor, neutralAmt),
-          tinter.addColorsRGB('#cccccc', baseColor, neutralAmt),
-          tinter.addColorsRGB('#ffffff', baseColor, neutralAmt)
+        let baseGreys = [
+          '#000000',
+          '#333333',
+          '#666666',
+          '#999999',
+          '#cccccc',
+          '#ffffff'
         ]
+
+        let greys = baseGreys.map((v, i) => {
+          return tinter.addColorsRGB(v, baseColor, neutralAmt)
+        })
 
         d3.select('div#neutrals')
           .selectAll('div')
@@ -296,30 +300,24 @@
             return d
           })
 
-          neutralAmtInput.addEventListener('keyup', (event) => {
-            if (event.key === 'Enter') {
-              neutralAmt = neutralAmtInput.value
-              console.log('neutral amt: ', neutralAmt)
-              greys = [
-                tinter.addColorsRGB('#000000', baseColor, neutralAmt),
-                tinter.addColorsRGB('#333333', baseColor, neutralAmt),
-                tinter.addColorsRGB('#666666', baseColor, neutralAmt),
-                tinter.addColorsRGB('#999999', baseColor, neutralAmt),
-                tinter.addColorsRGB('#cccccc', baseColor, neutralAmt),
-                tinter.addColorsRGB('#ffffff', baseColor, neutralAmt)
-              ]
+        neutralAmtInput.addEventListener('keyup', (event) => {
+          if (event.key === 'Enter') {
+            neutralAmt = neutralAmtInput.value
+            greys = baseGreys.map((v, i) => {
+              return tinter.addColorsRGB(v, baseColor, neutralAmt)
+            })
 
-              d3.select('div#neutrals')
-                .selectAll('div')
-                .data(greys)
-                .style('background-color', (d) => {
-                  return d
-                })
-                .text((d) => {
-                  return d
-                })
-            }
-          })
+            d3.select('div#neutrals')
+              .selectAll('div')
+              .data(greys)
+              .style('background-color', (d) => {
+                return d
+              })
+              .text((d) => {
+                return d
+              })
+          }
+        })
 
         d3.select('body')
           .append('div')
