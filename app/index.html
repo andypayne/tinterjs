@@ -3,8 +3,7 @@
   <head>
     <meta charset="UTF-8">
     <title>Color</title>
-    <link href="https://fonts.googleapis.com/css?family=VT323" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Roboto+Mono" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=VT323|Roboto+Mono|Aguafina+Script" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="reset.css">
     <style type="text/css">
 
@@ -41,8 +40,95 @@
         text-shadow: 0px 1px 3px #777;
       }
 
-      label-shadow {
-        text-shadow: 0px 1px 8px #000;
+      .label-shadow {
+        text-shadow: 0px 1px 3px #777;
+      }
+      
+      #styled-preview {
+        width: 8em;
+        height: 5em;
+        margin: 1em;
+        color: #fff;
+        text-shadow: 0px 1px 3px #777;
+        font-family: 'Aguafina Script', cursive;
+        line-height: 5em;
+        text-align: center;
+        font-size: 3em;
+        border-radius: 0.25em;
+      }
+
+      #styled-preview h2 {
+        transform: rotate(-30deg);
+        position: relative;
+        left: -1.4em;
+        top: 0.98em;
+      }
+
+      .triangle-bottomright {
+        width: 0;
+        height: 0;
+        border-bottom: 56px solid red;
+        border-left: 118px solid transparent;
+        position: relative;
+        top: -46%;
+        left: 34%;
+      }
+
+      .triangle-topleft {
+        width: 0;
+        height: 0;
+        border-top: 56px solid red;
+        border-right: 118px solid transparent;
+        float: left;
+        position: relative;
+        top: 18%;
+        left: 34%;
+      }
+
+      #styled-albers {
+        display: inline-block;
+      }
+      .sq-ctr-1, .sq-ctr-2 {
+        display: inline-block;
+        background-color: #ccc;
+        width: 200px;
+        height: 200px;
+      }
+      .sq-center {
+        background-color: #666;
+        width: 40px;
+        height: 40px;
+        margin: 80px auto;
+      }
+
+      #styled-circle-grid {
+        display: inline-block;
+        width: 200px;
+        height: 200px;
+        background-color: #ccc;
+      }
+
+      #styled-circle-grid .circ {
+        background-color: #666;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        float: left;
+        position: relative;
+      }
+      #styled-circle-grid .circ {
+        margin-top: 20px;
+        margin-left: 20px;
+      }
+      #styled-circle-grid .circ:nth-child(2),
+      #styled-circle-grid .circ:nth-child(4) {
+        opacity: 0;
+      }
+      #styled-grad {
+        display: inline-block;
+        width: 200px;
+        height: 200px;
+        background: linear-gradient(red, yellow);
       }
     </style>
     <script src="d3.v4.min.js"></script>
@@ -56,12 +142,49 @@
         <h3>Neutrals</h3>
         <input type="text" name="neutral-amt" size="5" value="0.2" placeholder="0.0-1.0">
       </div>
+      <div id="styled-preview">
+        <div class="triangle-topleft"></div>
+        <h2>This is so classy</h2>
+        <div class="triangle-bottomright"></div>
+      </div>
+      <div id="styled-albers">
+        <div class="sq-ctr-1">
+          <div class="sq-center"></div>
+        </div>
+        <div class="sq-ctr-2">
+          <div class="sq-center"></div>
+        </div>
+      </div>
+      <div id="styled-circle-grid">
+        <div class="circ"></div>
+        <div class="circ"></div>
+        <div class="circ"></div>
+        <div class="circ"></div>
+        <div class="circ"></div>
+        <div class="circ"></div>
+        <div class="circ"></div>
+        <div class="circ"></div>
+        <div class="circ"></div>
+      </div>
+      <div id="styled-grad">
+      </div>
     </div>
     <script src="tinter.js"></script>
     <script>
       let tinter = new Tinter()
       let colorInput = document.querySelector('input[name=base-color]')
       let neutralAmtInput = document.querySelector('input[name=neutral-amt]')
+      let styledPreviewEl = document.querySelector('div#styled-preview')
+      let triBottomRight = document.querySelector('.triangle-bottomright')
+      let triTopLeft = document.querySelector('.triangle-topleft')
+      let sqCtr1 = document.querySelector('#styled-albers .sq-ctr-1')
+      let sqCtr2 = document.querySelector('#styled-albers .sq-ctr-2')
+      let sqCtr1Center = sqCtr1.querySelector('.sq-center')
+      let sqCtr2Center = sqCtr2.querySelector('.sq-center')
+      let circleGrid = document.querySelector('#styled-circle-grid')
+      let gradBox = document.querySelector('#styled-grad')
+
+
       let w = 400
       let h = 400
 
@@ -314,8 +437,47 @@
               .text((d) => {
                 return d
               })
+
+            // Styled block
+            styledPreviewEl.style.backgroundColor = colorInput.value
+            styledPreviewEl.style.color = greys[greys.length - 1]
+            //styledPreviewEl.style.border = "4px solid " + tinter.addColorsRGB('#999999', tinter.complementary(baseColor), 0.1)
+            styledPreviewEl.style.boxShadow = '0px 4px 13px 3px ' + tinter.addColorsRGB('#999999', tinter.complementary(baseColor), 0.1)
+            triBottomRight.style.borderBottom = '56px solid ' + tinter.complementary(baseColor)
+            triTopLeft.style.borderTop = '56px solid ' + tinter.complementary(baseColor)
+
+            // Circle Grid
+            circleGrid.style.backgroundColor = tinter.addColorsRGB('#999999', baseColor, neutralAmt)
+            circleGrid.querySelector('#styled-circle-grid .circ:nth-child(7)').style.backgroundColor = tinter.addColorsRGB('#333333', tinter.complementary(baseColor), neutralAmt)
           }
         })
+
+        // Styled block
+        styledPreviewEl.style.backgroundColor = colorInput.value
+        styledPreviewEl.style.color = greys[greys.length - 1]
+        //styledPreviewEl.style.border = '4px solid ' + tinter.addColorsRGB('#999999', tinter.complementary(baseColor), 0.1)
+        styledPreviewEl.style.boxShadow = '0px 4px 13px 3px ' + tinter.addColorsRGB('#999999', tinter.complementary(baseColor), 0.1)
+        triBottomRight.style.borderBottom = '56px solid ' + tinter.complementary(baseColor)
+        triTopLeft.style.borderTop = '56px solid ' + tinter.complementary(baseColor)
+
+        // Albers
+        sqCtr1.style.backgroundColor = tinter.complementary(baseColor)
+        sqCtr2.style.backgroundColor = baseColor
+        sqCtr1Center.style.backgroundColor = baseColor
+        sqCtr2Center.style.backgroundColor = tinter.complementary(baseColor)
+
+        // Circle Grid
+        circleGrid.style.backgroundColor = tinter.addColorsRGB('#cccccc', baseColor, neutralAmt)
+        circleGrid.querySelector('#styled-circle-grid .circ:nth-child(1)').style.backgroundColor = splc[0]
+        circleGrid.querySelector('#styled-circle-grid .circ:nth-child(3)').style.backgroundColor = splc[1]
+        circleGrid.querySelector('#styled-circle-grid .circ:nth-child(5)').style.backgroundColor = triad[0]
+        circleGrid.querySelector('#styled-circle-grid .circ:nth-child(6)').style.backgroundColor = triad[1]
+        circleGrid.querySelector('#styled-circle-grid .circ:nth-child(7)').style.backgroundColor = tinter.addColorsRGB('#333333', tinter.complementary(baseColor), neutralAmt)
+        circleGrid.querySelector('#styled-circle-grid .circ:nth-child(8)').style.backgroundColor = baseColor
+        circleGrid.querySelector('#styled-circle-grid .circ:nth-child(9)').style.backgroundColor = tinter.complementary(baseColor)
+        
+        // Grad Box
+        gradBox.style.background = 'linear-gradient(' + baseColor + ', ' + tinter.complementary(baseColor) + ')'
 
         d3.select('body')
           .append('div')
