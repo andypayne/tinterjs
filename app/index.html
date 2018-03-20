@@ -124,7 +124,15 @@
       #styled-circle-grid .circ:nth-child(4) {
         opacity: 0;
       }
+
       #styled-grad {
+        display: inline-block;
+        width: 200px;
+        height: 200px;
+        background: linear-gradient(red, yellow);
+      }
+
+      #styled-analogous-grad {
         display: inline-block;
         width: 200px;
         height: 200px;
@@ -170,8 +178,8 @@
         <div class="circ"></div>
         <div class="circ"></div>
       </div>
-      <div id="styled-grad">
-      </div>
+      <div id="styled-grad"></div>
+      <div id="styled-analogous-grad"></div>
     </div>
     <script src="tinter.js"></script>
     <script>
@@ -187,6 +195,7 @@
       let sqCtr2Center = sqCtr2.querySelector('.sq-center')
       let circleGrid = document.querySelector('#styled-circle-grid')
       let gradBox = document.querySelector('#styled-grad')
+      let analogousGradBox = document.querySelector('#styled-analogous-grad')
 
       let w = 400
       let h = 400
@@ -528,6 +537,7 @@
         
         // Grad Box
         gradBox.style.background = 'linear-gradient(' + baseColor + ', ' + tinter.complementary(baseColor) + ')'
+        analogousGradBox.style.background = 'linear-gradient(' + baseColor + ', ' + anlc[0] + ', ' + anlc[1] + ')'
 
         d3.select('body')
           .append('div')
