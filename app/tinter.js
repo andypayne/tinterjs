@@ -59,6 +59,9 @@ class Tinter {
    }
 
   rgbHSLSaturation(rgb) {
+    if (rgb[0] === '#') {
+      rgb = rgb.substr(1)
+    }
     let rs = rgb.substr(0, 2)
     let gs = rgb.substr(2, 2)
     let bs = rgb.substr(4, 2)
@@ -78,6 +81,9 @@ class Tinter {
   }
 
   rgbHue(rgb) {
+    if (rgb[0] === '#') {
+      rgb = rgb.substr(1)
+    }
     let rs = rgb.substr(0, 2)
     let gs = rgb.substr(2, 2)
     let bs = rgb.substr(4, 2)
@@ -97,6 +103,22 @@ class Tinter {
     } else if (maxC === b01) {
       return ((r01 - g01) / chroma + 4.0)
     }
+  }
+
+  rgbHueDeg(rgb) {
+    let hue = this.rgbHue(rgb)
+    if (hue < 0) {
+      hue += 6
+    }
+    return hue / 6 * 360
+  }
+
+  rgbHueRad(rgb) {
+    let hue = this.rgbHue(rgb)
+    if (hue < 0) {
+      hue += 6
+    }
+    return hue / 6 * 2 * Math.PI
   }
 
   rgbToHSL(rgb) {

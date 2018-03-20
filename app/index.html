@@ -130,6 +130,10 @@
         height: 200px;
         background: linear-gradient(red, yellow);
       }
+
+      .cmb-circle:hover {
+        border: 1px solid #000;
+      }
     </style>
     <script src="d3.v4.min.js"></script>
   </head>
@@ -184,7 +188,6 @@
       let circleGrid = document.querySelector('#styled-circle-grid')
       let gradBox = document.querySelector('#styled-grad')
 
-
       let w = 400
       let h = 400
 
@@ -207,9 +210,13 @@
            .enter()
            .append('circle')
            .attr('cx', (d, i) => {
+             //let hue = tinter.rgbHue(d)
+             //return 180 + 80 * Math.cos(hue / 6 * 2 * Math.PI)
              return 180 + 80 * Math.cos(i * Math.PI/1.5 + Math.PI/6)
            })
            .attr('cy', (d, i) => {
+             //let hue = tinter.rgbHue(d)
+             //return 120 + 80 * Math.sin(hue / 6 * 2 * Math.PI)
              return 120 + 80 * Math.sin(i * Math.PI/1.5 + Math.PI/6)
            })
            .attr('r', 60)
@@ -527,6 +534,45 @@
           .attr('class', 'color-block')
           .text(tinter.zeroHue(baseColor))
           .style('background-color', tinter.zeroHue(baseColor))
+
+        // Combined
+        let combinedList = triad.concat(splc).concat(anlc).concat(tinter.complementary(baseColor)).concat(baseColor)
+        let svgc = d3.select('body')
+                    .append('svg')
+                    .attr('width', w)
+                    .attr('height', h)
+        svgc.selectAll('circle')
+           //.data(triad.concat(baseColor))
+           .data(combinedList)
+           .enter()
+           .append('circle')
+           .attr('class', 'cmb-circle')
+           .attr('cx', (d, i) => {
+             let hue = tinter.rgbHueRad(d)
+             console.log('rgb = ', d, ', hue = ', hue, ', deg = ', hue / (2 * Math.PI) * 360)
+             return 180 + 80 * Math.cos(hue)
+           })
+           .attr('cy', (d, i) => {
+             let hue = tinter.rgbHueRad(d)
+             return 180 + 80 * Math.sin(hue)
+           })
+           .attr('r', (d, i) => {
+             let sat = tinter.rgbHSLSaturation(d)
+             console.log('rgb = ', d, ', sat = ', sat)
+             return sat * 40
+           })
+           .style('fill', (d) => {
+             return d
+           })
+           .append('svg:title')
+           .text((d) => { return d })
+        svgc.append('text')
+           .attr('x', (w / 2))             
+           .attr('y', 20)
+           .attr('text-anchor', 'middle')  
+           .style('font-size', '16px') 
+           .text('Combined')
+
       }
 
       if (document.location.hash) {
