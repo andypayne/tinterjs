@@ -107,7 +107,7 @@ class Tinter {
     if (hue < 0) {
       hue += 6
     }
-    return [60.0 * hue, this.rgbHSLSaturation(rgb), this.rgbLightness(rgb)]
+    return [Math.round(60.0 * hue), this.rgbHSLSaturation(rgb), this.rgbLightness(rgb)]
   }
 
   octetStrToInt1(os) {
@@ -192,9 +192,49 @@ class Tinter {
     return [t150, t210]
   }
 
+  // Given an RGB triple, returns the two 30-degree analogous colors.
+  analogous(rgb) {
+    let hsl = this.rgbToHSL(rgb)
+    let tpos30 = this.rgbArrayToStr(this.hslToRGB([(hsl[0] + 30.0) % 360, hsl[1], hsl[2]]))
+    let negAdjHue = hsl[0] - 30.0
+    if (negAdjHue < 0) {
+      negAdjHue = 360 + negAdjHue
+    }
+    //let tneg30 = this.rgbArrayToStr(this.hslToRGB([(hsl[0] - 30.0) % 360, hsl[1], hsl[2]]))
+    let tneg30 = this.rgbArrayToStr(this.hslToRGB([negAdjHue % 360, hsl[1], hsl[2]]))
+    return [tpos30, tneg30]
+  }
+
+  // Same sat & lightness, with zero degree hue
   zeroHue(rgb) {
     let hsl = this.rgbToHSL(rgb)
     let zh = this.rgbArrayToStr(this.hslToRGB([0, hsl[1], hsl[2]]))
+  }
+
+  // Convenience similarity
+  similarColors(rgb1, rgb2) {
+    if (rgb1[0] === '#') {
+      rgb1 = rgb1.substr(1)
+    }
+    if (rgb2[0] === '#') {
+      rgb2 = rgb2.substr(1)
+    }
+    let rs1 = rgb1.substr(0, 2)
+    let gs1 = rgb1.substr(2, 2)
+    let bs1 = rgb1.substr(4, 2)
+    let rs2 = rgb2.substr(0, 2)
+    let gs2 = rgb2.substr(2, 2)
+    let bs2 = rgb2.substr(4, 2)
+    if (Math.abs(rs1 - rs2) > 2) {
+      return false
+    }
+    if (Math.abs(gs1 - gs2) > 2) {
+      return false
+    }
+    if (Math.abs(bs1 - bs2) > 2) {
+      return false
+    }
+    return true
   }
 
   // Given two RGB colors, add the second one to the first one by amt (0-1)

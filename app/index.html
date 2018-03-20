@@ -191,6 +191,7 @@
       let processColor = (baseColor) => {
         let triad = tinter.triadColors(baseColor)
         let splc = tinter.splitComplementaries(baseColor)
+        let anlc = tinter.analogous(baseColor)
         console.log('baseColor: ', baseColor)
         d3.selectAll('div.color-block').remove()
 
@@ -321,6 +322,48 @@
             .attr('text-anchor', 'middle')  
             .style('font-size', '16px') 
             .text('Split Complementary Triad')
+
+        // Analogous
+        let svg4 = d3.select('body')
+                     .append('svg')
+                     .attr('width', w)
+                     .attr('height', h)
+        svg4.selectAll('circle')
+           .data(anlc.concat(baseColor))
+           .enter()
+           .append('circle')
+           .attr('cx', (d, i) => {
+             return 180 + 80 * Math.cos(i * Math.PI/1.5 + Math.PI/6)
+           })
+           .attr('cy', (d, i) => {
+             return 180 + 80 * Math.sin(i * Math.PI/1.5 + Math.PI/6)
+           })
+           .attr('r', 60)
+           .style('fill', (d) => {
+             return d
+           })
+        svg4.selectAll('text')
+           .data(anlc.concat(baseColor))
+           .enter()
+           .append('text')
+           .attr('x', (d, i) => {
+             return 180 + 80 * Math.cos(i * Math.PI/1.5 + Math.PI/6)
+           })
+           .attr('y', (d, i) => {
+             return 180 + 80 * Math.sin(i * Math.PI/1.5 + Math.PI/6)
+           })
+           .attr('fill', 'white')
+           .attr('text-anchor', 'middle')
+           .attr('class', 'label-shadow')
+           .text((d) => {
+             return d
+           })
+        svg4.append('text')
+            .attr('x', (w / 2))             
+            .attr('y', 20)
+            .attr('text-anchor', 'middle')  
+            .style('font-size', '16px') 
+            .text('30 Degree Analogous')
 
         d3.select('div#tints-shades')
           .append('div')
