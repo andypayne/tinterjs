@@ -20,6 +20,11 @@
         font-size: 24px;
       }
 
+      #color-form input[type=color] {
+        width: 4em;
+        height: 1.2em;
+      }
+
       #tints-shades {
         width: 100%;
       }
@@ -205,6 +210,7 @@
         let triad = tinter.triadColors(baseColor)
         let splc = tinter.splitComplementaries(baseColor)
         let anlc = tinter.analogous(baseColor)
+        let tetrad = tinter.tetradicColors(baseColor)
         console.log('baseColor: ', baseColor)
         d3.selectAll('div.color-block').remove()
 
@@ -547,13 +553,12 @@
           .style('background-color', tinter.zeroHue(baseColor))
 
         // Combined
-        let combinedList = triad.concat(splc).concat(anlc).concat(tinter.complementary(baseColor)).concat(baseColor)
+        let combinedList = triad.concat(splc).concat(anlc).concat(tinter.complementary(baseColor)).concat(tetrad).concat(baseColor)
         let svgc = d3.select('body')
                     .append('svg')
                     .attr('width', w)
                     .attr('height', h)
         svgc.selectAll('circle')
-           //.data(triad.concat(baseColor))
            .data(combinedList)
            .enter()
            .append('circle')

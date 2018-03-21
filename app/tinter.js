@@ -227,6 +227,15 @@ class Tinter {
     return [tpos30, tneg30]
   }
 
+  // Given an RGB triple, returns the remaining three colors of the tetradic square
+  tetradicColors(rgb) {
+    let hsl = this.rgbToHSL(rgb)
+    let t90 = this.rgbArrayToStr(this.hslToRGB([(hsl[0] + 90.0) % 360, hsl[1], hsl[2]]))
+    let t180 = this.rgbArrayToStr(this.hslToRGB([(hsl[0] + 180.0) % 360, hsl[1], hsl[2]]))
+    let t270 = this.rgbArrayToStr(this.hslToRGB([(hsl[0] + 270.0) % 360, hsl[1], hsl[2]]))
+    return [t90, t180, t270]
+  }
+
   // Same sat & lightness, with zero degree hue
   zeroHue(rgb) {
     let hsl = this.rgbToHSL(rgb)
