@@ -6,7 +6,6 @@
     <link href="https://fonts.googleapis.com/css?family=VT323|Roboto+Mono|Aguafina+Script" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="reset.css">
     <style type="text/css">
-
       body, * {
         font-size: 14px;
         font-family: 'Roboto Mono', monospace;
@@ -147,6 +146,7 @@
   </head>
   <body>
     <div id="color-form">
+      <input type="color" name="base-color-picker">
       <input type="text" name="base-color" value="#">
       <div id="tints-shades"><h3>Tints and Shades</h3></div>
       <div id="sats"><h3>Saturation Spectrum</h3></div>
@@ -185,6 +185,7 @@
     <script>
       let tinter = new Tinter()
       let colorInput = document.querySelector('input[name=base-color]')
+      let colorInputPicker = document.querySelector('input[name=base-color-picker]')
       let neutralAmtInput = document.querySelector('input[name=neutral-amt]')
       let styledPreviewEl = document.querySelector('div#styled-preview')
       let triBottomRight = document.querySelector('.triangle-bottomright')
@@ -587,6 +588,7 @@
 
       if (document.location.hash) {
         colorInput.value = document.location.hash
+        colorInputPicker.value = document.location.hash
         processColor(colorInput.value)
       }
 
@@ -601,6 +603,12 @@
           document.location.hash = colorInput.value
           processColor(colorInput.value)
         }
+      })
+
+      colorInputPicker.addEventListener('change', (event) => {
+        colorInput.value = colorInputPicker.value
+        document.location.hash = colorInput.value
+        processColor(colorInput.value)
       })
 
     </script>
