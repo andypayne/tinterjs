@@ -3,12 +3,13 @@
   <head>
     <meta charset="UTF-8">
     <title>Color</title>
-    <link href="https://fonts.googleapis.com/css?family=VT323|Roboto+Mono|Aguafina+Script" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Mono|Aguafina+Script|Geo" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="reset.css">
     <style type="text/css">
       body, * {
         font-size: 14px;
         font-family: 'Roboto Mono', monospace;
+        color: #333;
       }
 
       #color-form {
@@ -18,6 +19,7 @@
 
       #color-form input {
         font-size: 24px;
+        color: #333;
       }
 
       #color-form input[type=color] {
@@ -35,7 +37,7 @@
 
       .color-block {
         display: inline-block;
-        font-size: 2em;
+        font-size: 1em;
         width: 5em;
         height: 5em;
         line-height: 5em;
@@ -49,11 +51,12 @@
       }
       
       #styled-preview {
+        display: inline-block;
         width: 8em;
         height: 5em;
         margin: 1em;
         color: #fff;
-        text-shadow: 0px 1px 3px #777;
+        text-shadow: 0px 1px 4px #ccc;
         font-family: 'Aguafina Script', cursive;
         line-height: 5em;
         text-align: center;
@@ -62,10 +65,11 @@
       }
 
       #styled-preview h2 {
+        color: #fff;
         transform: rotate(-30deg);
         position: relative;
-        left: -1.4em;
-        top: 0.98em;
+        left: -1.2em;
+        top: 0.76em;
       }
 
       .triangle-bottomright {
@@ -74,7 +78,7 @@
         border-bottom: 56px solid red;
         border-left: 118px solid transparent;
         position: relative;
-        top: -46%;
+        top: -42%;
         left: 34%;
       }
 
@@ -85,7 +89,7 @@
         border-right: 118px solid transparent;
         float: left;
         position: relative;
-        top: 18%;
+        top: 15%;
         left: 34%;
       }
 
@@ -146,6 +150,43 @@
       .cmb-circle:hover {
         border: 1px solid #000;
       }
+
+      #styled-preview-2 {
+        background: linear-gradient(red, yellow);
+        color: #fff;
+        display: inline-block;
+        width: 8em;
+        height: 5em;
+        margin: 1em;
+        font-family: 'Geo', sans-serif;
+        font-size: 3em;
+        line-height: 1em;
+      }
+      #styled-preview-2 .letters-1,
+      #styled-preview-2 .letters-2 {
+        font-size: 6em;
+        font-family: 'Geo', sans-serif;
+        overflow: hidden;
+        color: #ccc;
+      }
+      #styled-preview-2 .letters-1 {
+        font-size: 8em;
+        position: relative;
+        left: -0.03em;
+        top: 0.02em;
+      }
+      #styled-preview-2 .letters-2 {
+        position: relative;
+        top: 0.45em;
+        left: 0.35em;
+      }
+      #styled-preview-2 .letters-3 {
+        text-shadow: 0px 2px 6px #999;
+        font-size: 1.8em;
+        font-weight: bold;
+        line-height: 0.3em;
+        text-align: center;
+      }
     </style>
     <script src="d3.v4.min.js"></script>
   </head>
@@ -159,10 +200,17 @@
         <h3>Neutrals</h3>
         <input type="text" name="neutral-amt" size="5" value="0.2" placeholder="0.0-1.0">
       </div>
-      <div id="styled-preview">
-        <div class="triangle-topleft"></div>
-        <h2>This is so classy</h2>
-        <div class="triangle-bottomright"></div>
+      <div id="styled-previews">
+        <div id="styled-preview">
+          <div class="triangle-topleft"></div>
+          <h2>Fancy analogous</h2>
+          <div class="triangle-bottomright"></div>
+        </div>
+        <div id="styled-preview-2">
+          <div class="letters-1">DC</div>
+          <div class="letters-2">CD</div>
+          <div class="letters-3">Tetrad</div>
+        </div>
       </div>
       <div id="styled-albers">
         <div class="sq-ctr-1">
@@ -193,8 +241,14 @@
       let colorInputPicker = document.querySelector('input[name=base-color-picker]')
       let neutralAmtInput = document.querySelector('input[name=neutral-amt]')
       let styledPreviewEl = document.querySelector('div#styled-preview')
+      let styledPreviewHEl = document.querySelector('div#styled-preview h2')
       let triBottomRight = document.querySelector('.triangle-bottomright')
       let triTopLeft = document.querySelector('.triangle-topleft')
+      let styledPreviewEl2 = document.querySelector('#styled-preview-2')
+      let letters1 = styledPreviewEl2.querySelector('.letters-1')
+      let letters2 = styledPreviewEl2.querySelector('.letters-2')
+      let letters3 = styledPreviewEl2.querySelector('.letters-3')
+      // TODO: Time cycle through different color schemes for the styled areas
       let sqCtr1 = document.querySelector('#styled-albers .sq-ctr-1')
       let sqCtr2 = document.querySelector('#styled-albers .sq-ctr-2')
       let sqCtr1Center = sqCtr1.querySelector('.sq-center')
@@ -504,14 +558,6 @@
                 return d
               })
 
-            // Styled block
-            styledPreviewEl.style.backgroundColor = colorInput.value
-            styledPreviewEl.style.color = greys[greys.length - 1]
-            //styledPreviewEl.style.border = "4px solid " + tinter.addColorsRGB('#999999', tinter.complementary(baseColor), 0.1)
-            styledPreviewEl.style.boxShadow = '0px 4px 13px 3px ' + tinter.addColorsRGB('#999999', tinter.complementary(baseColor), 0.1)
-            triBottomRight.style.borderBottom = '56px solid ' + tinter.complementary(baseColor)
-            triTopLeft.style.borderTop = '56px solid ' + tinter.complementary(baseColor)
-
             // Circle Grid
             circleGrid.style.backgroundColor = tinter.addColorsRGB('#999999', baseColor, neutralAmt)
             circleGrid.querySelector('#styled-circle-grid .circ:nth-child(7)').style.backgroundColor = tinter.addColorsRGB('#333333', tinter.complementary(baseColor), neutralAmt)
@@ -519,12 +565,19 @@
         })
 
         // Styled block
-        styledPreviewEl.style.backgroundColor = colorInput.value
+        styledPreviewHEl.style.color = tinter.tintShade(baseColor, -0.2)
+        styledPreviewEl.style.backgroundColor = tinter.tintShade(baseColor, 0.4)
         styledPreviewEl.style.color = greys[greys.length - 1]
-        //styledPreviewEl.style.border = '4px solid ' + tinter.addColorsRGB('#999999', tinter.complementary(baseColor), 0.1)
-        styledPreviewEl.style.boxShadow = '0px 4px 13px 3px ' + tinter.addColorsRGB('#999999', tinter.complementary(baseColor), 0.1)
-        triBottomRight.style.borderBottom = '56px solid ' + tinter.complementary(baseColor)
-        triTopLeft.style.borderTop = '56px solid ' + tinter.complementary(baseColor)
+        styledPreviewEl.style.boxShadow = '0px 4px 13px 3px ' + tinter.addColorsRGB('#999999', anlc[0], 0.1)
+        triBottomRight.style.borderBottom = '56px solid ' + tinter.tintShade(anlc[0], -0.1)
+        triTopLeft.style.borderTop = '56px solid ' + tinter.tintShade(anlc[1], -0.1)
+
+        // Styled Preview 2
+        styledPreviewEl2.style.background = tinter.addColorsRGB('#cccccc', tetrad[0], 0.2)
+        //letters1.style.color = 'linear-gradient(' + baseColor + ', ' + tetrad[1] + ', ' + tetrad[2] + ')'
+        letters1.style.color = tinter.addColorsRGB('#999999', tetrad[1], 0.2)
+        letters2.style.color = tinter.addColorsRGB('#999999', tetrad[2], 0.2)
+        letters3.style.color = baseColor
 
         // Albers
         sqCtr1.style.backgroundColor = tinter.complementary(baseColor)
@@ -606,6 +659,7 @@
 
         if (event.key === 'Enter') {
           document.location.hash = colorInput.value
+          colorInputPicker.value = colorInput.value
           processColor(colorInput.value)
         }
       })
