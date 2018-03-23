@@ -61,7 +61,7 @@
         line-height: 5em;
         text-align: center;
         font-size: 3em;
-        border-radius: 0.25em;
+        border-radius: 0.1em;
       }
 
       #styled-preview h2 {
@@ -152,6 +152,7 @@
       }
 
       #styled-preview-2 {
+        border-radius: 0.1em;
         background: linear-gradient(red, yellow);
         color: #fff;
         display: inline-block;
@@ -568,12 +569,13 @@
         styledPreviewHEl.style.color = tinter.tintShade(baseColor, -0.2)
         styledPreviewEl.style.backgroundColor = tinter.tintShade(baseColor, 0.4)
         styledPreviewEl.style.color = greys[greys.length - 1]
-        styledPreviewEl.style.boxShadow = '0px 4px 13px 3px ' + tinter.addColorsRGB('#999999', anlc[0], 0.1)
+        styledPreviewEl.style.boxShadow = '0px 4px 32px 3px ' + tinter.addColorsRGB('#999999', anlc[0], 0.1)
         triBottomRight.style.borderBottom = '56px solid ' + tinter.tintShade(anlc[0], -0.1)
         triTopLeft.style.borderTop = '56px solid ' + tinter.tintShade(anlc[1], -0.1)
 
         // Styled Preview 2
         styledPreviewEl2.style.background = tinter.addColorsRGB('#cccccc', tetrad[0], 0.2)
+        styledPreviewEl2.style.boxShadow = '0px 4px 32px 3px ' + tinter.addColorsRGB('#999999', tetrad[0], 0.1)
         //letters1.style.color = 'linear-gradient(' + baseColor + ', ' + tetrad[1] + ', ' + tetrad[2] + ')'
         letters1.style.color = tinter.addColorsRGB('#999999', tetrad[1], 0.2)
         letters2.style.color = tinter.addColorsRGB('#999999', tetrad[2], 0.2)
