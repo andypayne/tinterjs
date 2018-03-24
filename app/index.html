@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8">
     <title>Color</title>
-    <link href="https://fonts.googleapis.com/css?family=Roboto+Mono|Aguafina+Script|Geo" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Mono|Aguafina+Script|Geo|Abril+Fatface|Oswald" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="reset.css">
     <style type="text/css">
       body, * {
@@ -62,6 +62,7 @@
         text-align: center;
         font-size: 3em;
         border-radius: 0.1em;
+        float: left;
       }
 
       #styled-preview h2 {
@@ -162,6 +163,7 @@
         font-family: 'Geo', sans-serif;
         font-size: 3em;
         line-height: 1em;
+        float: left;
       }
       #styled-preview-2 .letters-1,
       #styled-preview-2 .letters-2 {
@@ -188,6 +190,34 @@
         line-height: 0.3em;
         text-align: center;
       }
+
+      #styled-preview-3 {
+        display: inline-block;
+        width: 8em;
+        height: 5em;
+        margin: 1em;
+        color: #fff;
+        text-shadow: 0px 1px 4px #ccc;
+        line-height: 5em;
+        font-size: 3em;
+        border-radius: 0.1em;
+        float: left;
+      }
+
+      #styled-preview-3 h2 {
+        font-family: 'Abril Fatface', serif;
+        line-height: 1.5em;
+        text-align: center;
+      }
+
+      #styled-preview-3 p {
+        font-family: 'Oswald', sans-serif;
+        font-size: 0.4em;
+        line-height: 1em;
+        margin: 0.75em;
+        text-shadow: none;
+      }
+
     </style>
     <script src="d3.v4.min.js"></script>
   </head>
@@ -211,6 +241,10 @@
           <div class="letters-1">DC</div>
           <div class="letters-2">CD</div>
           <div class="letters-3">Tetrad</div>
+        </div>
+        <div id="styled-preview-3">
+          <h2>Complementary</h2>
+          <p>Split-complementary is a variation of the complementary color scheme. Split-complementary color schemes have the same strong visual contrast as complementary color schemes, but with less pressure.</p>
         </div>
       </div>
       <div id="styled-albers">
@@ -246,6 +280,9 @@
       let triBottomRight = document.querySelector('.triangle-bottomright')
       let triTopLeft = document.querySelector('.triangle-topleft')
       let styledPreviewEl2 = document.querySelector('#styled-preview-2')
+      let styledPreviewEl3 = document.querySelector('#styled-preview-3')
+      let styledPreviewEl3H = styledPreviewEl3.querySelector('h2')
+      let styledPreviewEl3P = styledPreviewEl3.querySelector('p')
       let letters1 = styledPreviewEl2.querySelector('.letters-1')
       let letters2 = styledPreviewEl2.querySelector('.letters-2')
       let letters3 = styledPreviewEl2.querySelector('.letters-3')
@@ -580,6 +617,12 @@
         letters1.style.color = tinter.addColorsRGB('#999999', tetrad[1], 0.2)
         letters2.style.color = tinter.addColorsRGB('#999999', tetrad[2], 0.2)
         letters3.style.color = baseColor
+
+        // Styled Preview 3
+        styledPreviewEl3.style.background = 'linear-gradient(' + tinter.addColorsRGB('#cccccc', splc[0], 0.2) + ', ' + tinter.addColorsRGB('#999999', splc[1], 0.2) + ')'
+        styledPreviewEl3.style.boxShadow = '0px 4px 32px 3px ' + tinter.addColorsRGB('#999999', splc[0], 0.1)
+        styledPreviewEl3H.style.color = splc[1]
+        styledPreviewEl3P.style.color = tinter.addColorsRGB('#333333', baseColor, 0.2)
 
         // Albers
         sqCtr1.style.backgroundColor = tinter.complementary(baseColor)
