@@ -12,6 +12,10 @@
         color: #333;
       }
 
+      #container {
+        margin: 1em;
+      }
+
       #color-form {
         width: 100%;
         margin: 2em 2em;
@@ -26,6 +30,14 @@
         width: 4em;
         height: 1.2em;
       }
+
+      #tints-shades,
+      #sats,
+      #neutrals
+      {
+        margin: 1em;
+      }
+
 
       #tints-shades {
         width: 100%;
@@ -218,62 +230,71 @@
         text-shadow: none;
       }
 
+      input[name=second-color-picker] {
+        margin-left: 1em;
+      }
     </style>
     <script src="d3.v4.min.js"></script>
   </head>
   <body>
-    <div id="color-form">
-      <input type="color" name="base-color-picker">
-      <input type="text" name="base-color" value="#">
-      <div id="tints-shades"><h3>Tints and Shades</h3></div>
-      <div id="sats"><h3>Saturation Spectrum</h3></div>
-      <div id="neutrals">
-        <h3>Neutrals</h3>
-        <input type="text" name="neutral-amt" size="5" value="0.2" placeholder="0.0-1.0">
+    <div id="container">
+      <div id="color-form">
+        <input type="color" name="base-color-picker">
+        <input type="text" name="base-color" value="#" size="7">
+        <input type="color" name="second-color-picker">
+        <input type="text" name="second-color" value="#" size="7">
+        <div id="tints-shades"><h3>Tints and Shades</h3></div>
+        <div id="sats"><h3>Saturation Spectrum</h3></div>
+        <div id="neutrals">
+          <h3>Neutrals</h3>
+          <input type="text" name="neutral-amt" size="5" value="0.2" placeholder="0.0-1.0">
+        </div>
+        <div id="styled-previews">
+          <div id="styled-preview">
+            <div class="triangle-topleft"></div>
+            <h2>Fancy analogous</h2>
+            <div class="triangle-bottomright"></div>
+          </div>
+          <div id="styled-preview-2">
+            <div class="letters-1">DC</div>
+            <div class="letters-2">CD</div>
+            <div class="letters-3">Tetrad</div>
+          </div>
+          <div id="styled-preview-3">
+            <h2>Complementary</h2>
+            <p>Split-complementary is a variation of the complementary color scheme. Split-complementary color schemes have the same strong visual contrast as complementary color schemes, but with less pressure.</p>
+          </div>
+        </div>
+        <div id="styled-albers">
+          <div class="sq-ctr-1">
+            <div class="sq-center"></div>
+          </div>
+          <div class="sq-ctr-2">
+            <div class="sq-center"></div>
+          </div>
+        </div>
+        <div id="styled-circle-grid">
+          <div class="circ"></div>
+          <div class="circ"></div>
+          <div class="circ"></div>
+          <div class="circ"></div>
+          <div class="circ"></div>
+          <div class="circ"></div>
+          <div class="circ"></div>
+          <div class="circ"></div>
+          <div class="circ"></div>
+        </div>
+        <div id="styled-grad"></div>
+        <div id="styled-analogous-grad"></div>
       </div>
-      <div id="styled-previews">
-        <div id="styled-preview">
-          <div class="triangle-topleft"></div>
-          <h2>Fancy analogous</h2>
-          <div class="triangle-bottomright"></div>
-        </div>
-        <div id="styled-preview-2">
-          <div class="letters-1">DC</div>
-          <div class="letters-2">CD</div>
-          <div class="letters-3">Tetrad</div>
-        </div>
-        <div id="styled-preview-3">
-          <h2>Complementary</h2>
-          <p>Split-complementary is a variation of the complementary color scheme. Split-complementary color schemes have the same strong visual contrast as complementary color schemes, but with less pressure.</p>
-        </div>
-      </div>
-      <div id="styled-albers">
-        <div class="sq-ctr-1">
-          <div class="sq-center"></div>
-        </div>
-        <div class="sq-ctr-2">
-          <div class="sq-center"></div>
-        </div>
-      </div>
-      <div id="styled-circle-grid">
-        <div class="circ"></div>
-        <div class="circ"></div>
-        <div class="circ"></div>
-        <div class="circ"></div>
-        <div class="circ"></div>
-        <div class="circ"></div>
-        <div class="circ"></div>
-        <div class="circ"></div>
-        <div class="circ"></div>
-      </div>
-      <div id="styled-grad"></div>
-      <div id="styled-analogous-grad"></div>
     </div>
     <script src="tinter.js"></script>
     <script>
       let tinter = new Tinter()
       let colorInput = document.querySelector('input[name=base-color]')
       let colorInputPicker = document.querySelector('input[name=base-color-picker]')
+      let secondColorInput = document.querySelector('input[name=second-color]')
+      let secondColorInputPicker = document.querySelector('input[name=second-color-picker]')
       let neutralAmtInput = document.querySelector('input[name=neutral-amt]')
       let styledPreviewEl = document.querySelector('div#styled-preview')
       let styledPreviewHEl = document.querySelector('div#styled-preview h2')
@@ -298,7 +319,7 @@
       let w = 400
       let h = 400
 
-      let processColor = (baseColor) => {
+      let processColor = (baseColor, secondColor = undefined) => {
         let triad = tinter.triadColors(baseColor)
         let splc = tinter.splitComplementaries(baseColor)
         let anlc = tinter.analogous(baseColor)
@@ -663,7 +684,7 @@
            .attr('class', 'cmb-circle')
            .attr('cx', (d, i) => {
              let hue = tinter.rgbHueRad(d)
-             console.log('rgb = ', d, ', hue = ', hue, ', deg = ', hue / (2 * Math.PI) * 360)
+             //console.log('rgb = ', d, ', hue = ', hue, ', deg = ', hue / (2 * Math.PI) * 360)
              return 180 + 80 * Math.cos(hue)
            })
            .attr('cy', (d, i) => {
@@ -672,7 +693,7 @@
            })
            .attr('r', (d, i) => {
              let sat = tinter.rgbHSLSaturation(d)
-             console.log('rgb = ', d, ', sat = ', sat)
+             //console.log('rgb = ', d, ', sat = ', sat)
              return sat * 40
            })
            .style('fill', (d) => {
@@ -713,6 +734,24 @@
         colorInput.value = colorInputPicker.value
         document.location.hash = colorInput.value
         processColor(colorInput.value)
+      })
+
+      secondColorInput.addEventListener('keyup', (event) => {
+        setTimeout(() => {
+          if (secondColorInput.value.indexOf('#') !== 0) {
+            secondColorInput.value = '#'
+          }
+        }, 1)
+
+        if (event.key === 'Enter') {
+          secondColorInputPicker.value = secondColorInput.value
+          processColor(colorInput.value, secondColorInput.value)
+        }
+      })
+
+      secondColorInputPicker.addEventListener('change', (event) => {
+        secondColorInput.value = secondColorInputPicker.value
+        processColor(colorInput.value, secondColorInput.value)
       })
 
     </script>
