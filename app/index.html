@@ -160,6 +160,13 @@
         background: linear-gradient(red, yellow);
       }
 
+      #styled-2-grad {
+        display: inline-block;
+        width: 200px;
+        height: 200px;
+        background: none;
+      }
+
       .cmb-circle:hover {
         border: 1px solid #000;
       }
@@ -286,6 +293,7 @@
         </div>
         <div id="styled-grad"></div>
         <div id="styled-analogous-grad"></div>
+        <div id="styled-2-grad"></div>
       </div>
     </div>
     <script src="tinter.js"></script>
@@ -315,6 +323,7 @@
       let circleGrid = document.querySelector('#styled-circle-grid')
       let gradBox = document.querySelector('#styled-grad')
       let analogousGradBox = document.querySelector('#styled-analogous-grad')
+      let grad2Box = document.querySelector('#styled-2-grad')
 
       let w = 400
       let h = 400
@@ -501,77 +510,49 @@
             .style('font-size', '16px') 
             .text('30 Degree Analogous')
 
+        let gradationAmts = [
+          -0.6,
+          -0.4,
+          -0.2,
+          0,
+          0.2,
+          0.4,
+          0.6
+        ]
+
+        let tintsAndShades = gradationAmts.map((v, i) => {
+          return tinter.tintShade(baseColor, v)
+        })
+
         d3.select('div#tints-shades')
+          .selectAll('div')
+          .data(tintsAndShades)
+          .enter()
           .append('div')
           .attr('class', 'color-block')
-          .text(tinter.tintShade(baseColor, -0.6))
-          .style('background-color', tinter.tintShade(baseColor, -0.6))
-        d3.select('div#tints-shades')
-          .append('div')
-          .attr('class', 'color-block')
-          .text(tinter.tintShade(baseColor, -0.4))
-          .style('background-color', tinter.tintShade(baseColor, -0.4))
-        d3.select('div#tints-shades')
-          .append('div')
-          .attr('class', 'color-block')
-          .text(tinter.tintShade(baseColor, -0.2))
-          .style('background-color', tinter.tintShade(baseColor, -0.2))
-        d3.select('div#tints-shades')
-          .append('div')
-          .attr('class', 'color-block')
-          .text(baseColor)
-          .style('background-color', baseColor)
-        d3.select('div#tints-shades')
-          .append('div')
-          .attr('class', 'color-block')
-         .text(tinter.tintShade(baseColor, 0.2))
-          .style('background-color', tinter.tintShade(baseColor, 0.2))
-        d3.select('div#tints-shades')
-          .append('div')
-          .attr('class', 'color-block')
-          .text(tinter.tintShade(baseColor, 0.4))
-          .style('background-color', tinter.tintShade(baseColor, 0.4))
-        d3.select('div#tints-shades')
-          .append('div')
-          .attr('class', 'color-block')
-          .text(tinter.tintShade(baseColor, 0.6))
-          .style('background-color', tinter.tintShade(baseColor, 0.6))
+          .style('background-color', (d) => {
+            return d
+          })
+          .text((d) => {
+            return d
+          })
+
+        let modSats = gradationAmts.map((v, i) => {
+          return tinter.modSaturation(baseColor, v)
+        })
 
         d3.select('div#sats')
+          .selectAll('div')
+          .data(modSats)
+          .enter()
           .append('div')
           .attr('class', 'color-block')
-          .text(tinter.modSaturation(baseColor, -0.6))
-          .style('background-color', tinter.modSaturation(baseColor, -0.6))
-        d3.select('div#sats')
-          .append('div')
-          .attr('class', 'color-block')
-          .text(tinter.modSaturation(baseColor, -0.4))
-          .style('background-color', tinter.modSaturation(baseColor, -0.4))
-        d3.select('div#sats')
-          .append('div')
-          .attr('class', 'color-block')
-          .text(tinter.modSaturation(baseColor, -0.2))
-          .style('background-color', tinter.modSaturation(baseColor, -0.2))
-        d3.select('div#sats')
-          .append('div')
-          .attr('class', 'color-block')
-          .text(baseColor)
-          .style('background-color', baseColor)
-        d3.select('div#sats')
-          .append('div')
-          .attr('class', 'color-block')
-         .text(tinter.modSaturation(baseColor, 0.2))
-          .style('background-color', tinter.modSaturation(baseColor, 0.2))
-        d3.select('div#sats')
-          .append('div')
-          .attr('class', 'color-block')
-          .text(tinter.modSaturation(baseColor, 0.4))
-          .style('background-color', tinter.modSaturation(baseColor, 0.4))
-        d3.select('div#sats')
-          .append('div')
-          .attr('class', 'color-block')
-          .text(tinter.modSaturation(baseColor, 0.6))
-          .style('background-color', tinter.modSaturation(baseColor, 0.6))
+          .style('background-color', (d) => {
+            return d
+          })
+          .text((d) => {
+            return d
+          })
 
         let neutralAmt = neutralAmtInput.value
         let baseGreys = [
@@ -664,6 +645,9 @@
         // Grad Box
         gradBox.style.background = 'linear-gradient(' + baseColor + ', ' + tinter.complementary(baseColor) + ')'
         analogousGradBox.style.background = 'linear-gradient(' + baseColor + ', ' + anlc[0] + ', ' + anlc[1] + ')'
+        if (secondColor) {
+          grad2Box.style.background = 'linear-gradient(' + baseColor + ', ' + secondColor + ')'
+        }
 
         d3.select('body')
           .append('div')
