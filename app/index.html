@@ -692,7 +692,45 @@
            .style('font-size', '16px') 
            .text('Combined')
 
+        // Two Color Combined
+        if (secondColor) {
+          let combined2List = [baseColor, secondColor]
+          let svgd = d3.select('body')
+                      .append('svg')
+                      .attr('width', w)
+                      .attr('height', h)
+          svgd.selectAll('circle')
+             .data(combined2List)
+             .enter()
+             .append('circle')
+             .attr('class', 'cmb-circle')
+             .attr('cx', (d, i) => {
+               let hue = tinter.rgbHueRad(d)
+               return 180 + 80 * Math.cos(hue)
+             })
+             .attr('cy', (d, i) => {
+               let hue = tinter.rgbHueRad(d)
+               return 180 + 80 * Math.sin(hue)
+             })
+             .attr('r', (d, i) => {
+               let sat = tinter.rgbHSLSaturation(d)
+               return sat * 40
+             })
+             .style('fill', (d) => {
+               return d
+             })
+             .append('svg:title')
+             .text((d) => { return d })
+          svgd.append('text')
+             .attr('x', (w / 2))             
+             .attr('y', 20)
+             .attr('text-anchor', 'middle')  
+             .style('font-size', '16px') 
+             .text('Two Color Combined')
+        }
+
       }
+
 
       if (document.location.hash) {
         colorInput.value = document.location.hash
